@@ -7,7 +7,10 @@ const pool = createPool({
     user: process.env["DB_USER"] || "",
     password: process.env["DB_PASSWORD"] || "",
     database: process.env["DB_NAME"] || "",
-    connectTimeout: 30000,
+    connectTimeout: 100000,
+    waitForConnections: true,
+    connectionLimit: 10, // Adjust based on your server's capacity
+    queueLimit: 0,
 });
 export const getDBConnection = async () => {
     return pool.getConnection();
