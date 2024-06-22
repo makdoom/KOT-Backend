@@ -12,7 +12,11 @@ const pool = createPool({
   connectTimeout: 30000,
 });
 
-export default pool;
+export const getDBConnection = async () => {
+  return pool.getConnection();
+};
+
+// export default pool;
 
 // import Logger from "@/logger";
 // import { createConnection } from "mysql2/promise";

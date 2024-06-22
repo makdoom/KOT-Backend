@@ -1,4 +1,5 @@
-import pool from "@/config/db";
+// import pool from "@/config/db";
+import { getDBConnection } from "@/config/db";
 import type { ResultSetHeader, RowDataPacket } from "mysql2";
 
 type QueryResult<T> = T[] | ResultSetHeader;
@@ -8,6 +9,7 @@ export const selectQuery = async <T>(
   queryString: string
 ): Promise<Partial<T>[]> => {
   try {
+    const pool = await getDBConnection();
     const [result] = await pool.execute(queryString);
     return result as T[];
   } catch (error) {
@@ -22,6 +24,7 @@ export const updateQuery = async <T>(
   data: T
 ): Promise<QueryResult<T>> => {
   try {
+    const pool = await getDBConnection();
     const [rows] = await pool.execute<ResultSetHeader>(queryString, [data]);
     return rows as QueryResult<T>;
   } catch (error) {
@@ -34,11 +37,15 @@ export const executeQuery = async <T>(
   queryString: string,
   params: unknown
 ): Promise<T[]> => {
+  let pool;
   try {
+    pool = await getDBConnection();
     const [result] = await pool.execute<RowDataPacket[]>(queryString, [params]);
     return result as T[];
   } catch (error) {
     console.error("Error executing query:", error);
     throw error;
+  } finally {
+    if (pool) pool.release();
   }
 };
