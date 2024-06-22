@@ -9,7 +9,10 @@ const pool = createPool({
     database: process.env["DB_NAME"] || "",
     connectTimeout: 30000,
 });
-export default pool;
+export const getDBConnection = async () => {
+    return pool.getConnection();
+};
+// export default pool;
 // import Logger from "../logger/index.js";
 // import { createConnection } from "mysql2/promise";
 // export const getDBConnection = async () => {

@@ -4,10 +4,12 @@ import { AppResponse } from "../utils/AppResponse.js";
 import AsyncHandler from "../utils/AsyncHandler.js";
 export const loginRoute = AsyncHandler(async (req, res, next) => {
     const { username, password, machinename } = req.body;
+    console.log({ username, password, machinename });
     if (!username)
         return res.json(new AppResponse(400, "Username not provided", null));
     if (!password)
         return res.json(new AppResponse(400, "Password not provided", null));
+    console.log("callling service");
     const result = await loginService({
         username,
         userpassword: password,
